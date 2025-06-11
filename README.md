@@ -1,53 +1,23 @@
+# PreSync: AI-Based Face Recognition Attendance System
 
-# Face Recognition Attendance System 
+## 📌 Overview
+**PreSync** is a lightweight, AI-powered attendance tracking system that uses face recognition to identify individuals and mark their presence. Built with OpenCV and Flask, it's ideal for educational or prototype use cases requiring contactless, automated attendance.
 
-## Description
-Software for Industry , where they can track the attendence of their employee with the help of face recognition using OpenCV library.
+## 🧠 Key Features
+- 👤 Add and register new users with unique face data.
+- 📸 Capture real-time images for facial recognition.
+- 🧾 Mark attendance using live webcam input.
+- 📅 View daily attendance logs.
+- 📋 Track total registered users in the system.
 
-## Table of Contents
-- [Project Plan](#project-plan)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+## 🛠️ Tech Stack
+- **Frontend**: HTML5, CSS3, Bootstrap
+- **Backend**: Python (Flask), OpenCV
+- **Others**: NumPy, Pandas, Haar Cascade Classifier
 
-## Project Plan
-- Task:
-  - [x] Create a home page
-  - [x] Show attendence log on home for particular day
-  - [ ] Recreate a HTML , bootstrap boilerplate and remove unwanted code
-  - [ ] Show date and day on home page
-  - [ ] Company name should be visible on home page
-  - [ ] Show list of total Employee on home page
-  - [ ] Create a Admin panel
-  - [ ] Give various rights to admin 
-  - [ ] Work on UI
+## 🚀 Installation Guide
 
-## Features
-- Adding a New User
-
--	Capturing Live Images
-
--	To understand the Total number of Users in Database
-  
--	Click on Take Attendance 
-
--	Multiple User Faces can be detected
-
--	Attendance of Multiple Users taken
-
--	Attendance of Users displayed
-
-## Installation
-- Explain how to install or set up the project.
-
-## Usage
-- this is useful in tracking the attendence of your employees
-
-## Contributing
-- Contributers are welcomed, you can simply fork the repo and contribute , and make PR
-- Dont wait for getting issue assigned to you
-## License
-- Include information about the project's license.
-
+### 1. Clone the Repository
+### 2. Create Virtual Environment
+### 3. Install Dependencies
+### 4. Run the App
