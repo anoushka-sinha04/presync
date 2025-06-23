@@ -1,4 +1,18 @@
 import sqlite3
+def init_admin_db():
+    conn = sqlite3.connect('admin_data.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS admins (
+            username TEXT PRIMARY KEY,
+            password TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+init_admin_db()
+
+
 import cv2
 import os
 from flask import Flask,request,render_template,redirect,session,url_for
@@ -103,11 +117,52 @@ def add_attendance(name):
 ################## ROUTING FUNCTIONS ##############################
 
 #### Our main page
+@app.route('/adminlogin', methods=['GET', 'POST'])
+def adminlogin():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = sqlite3.connect('admin_data.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM admins WHERE username = ? AND password = ?", (username, password))
+        result = c.fetchone()
+        conn.close()
+        if result:
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return "Invalid credentials. Please try again."
+    return render_template('adminlogin.html')
+
+
+@app.route('/sign')
+def sign_up():
+    return render_template('sign.html')
+
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('admin.html', total_users=10, today_attendance=5)
+
 @app.route('/')
 def home():
     names,rolls,times,l = extract_attendance()
     return render_template('home.html',names=names,rolls=rolls,times=times,l=l,totalreg=totalreg(),datetoday2=datetoday2, mess = MESSAGE)
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = sqlite3.connect('admin_data.db')
+        c = conn.cursor()
+        try:
+            c.execute("INSERT INTO admins (username, password) VALUES (?, ?)", (username, password))
+            conn.commit()
+        except sqlite3.IntegrityError:
+            conn.close()
+            return "Username already exists. Try another."
+        conn.close()
+        return redirect(url_for('adminlogin'))
+    return render_template('sign.html')
 
 #### This function will run when we click on Take Attendance Button
 @app.route('/start',methods=['GET'])
@@ -206,5 +261,5 @@ def add():
 #### Our main function which runs the Flask App
 app.run(debug=True,port=1000)
 if __name__ == '__main__':
-    pass
+    app.run(debug=True, port=1000)
 #### This function will run when we add a new user

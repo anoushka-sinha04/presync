@@ -1,60 +1,189 @@
-.navbar-text {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    color: black;
+/* style.css — Mauve + Cream + Graphite Theme */
+
+:root {
+  --mauve: #a78bfa;
+  --cream: #fdf6ec;
+  --graphite: #2e2e2e;
+  --light-mauve: #d8c8ff;
+  --soft-graphite: #444;
+  --font-main: 'Segoe UI', sans-serif;
 }
 
-/* Custom styles for the navbar */
-.custom-navbar {
-    background-color: rgba(194, 217, 255, 0.6); /* Semi-transparent white background */
-    border-radius: 30px; /* Capsule shape */
-    margin-top: 10px; /* Margin from the top */
-    margin-left: 20px; /* Margin from the left */
-    margin-right: 20px; /* Margin from the right */
+body {
+  margin: 0;
+  font-family: var(--font-main);
+  background-color: var(--cream);
+  color: var(--graphite);
 }
 
-.custom-navbar .navbar-brand {
-    color: black; /* Text color for the company name */
-    font-size: 26px; /* Increase font size */
-    margin-left: 20px; /* Margin from the left to the logo */
+header {
+  background-color: var(--mauve);
+  color: white;
+  padding: 1.2rem 2rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.custom-navbar .navbar-brand:hover {
-    text-decoration: none; /* Remove the underline on hover */
+.logo {
+  height: 200px;
+  width: auto;
 }
 
-.custom-navbar .nav-link {
-    color: black; /* Text color for other links */
-    transition: box-shadow 0.3s; /* Smooth transition for the shadow */
-    font-size: 18px; /* Increase font size */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
-.custom-navbar .nav-link:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a shadow on hover */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  border: 1px solid var(--light-mauve);
 }
 
-.custom-navbar .navbar-text {
-    font-size: 18px; /* Increase font size */
+.card h2 {
+  font-size: 1.3rem;
+  color: var(--graphite);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--light-mauve);
+  padding-bottom: 0.5rem;
 }
 
-.custom-navbar .btn {
-    background-color: #6c3483; /* Dark purple background for the button */
-    color: white; /* Button text color */
-    border: none;
+label {
+  display: block;
+  margin: 0.5rem 0 0.2rem;
+  font-size: 0.95rem;
 }
 
-.custom-navbar .btn:hover {
-    background-color: #5b2a6e; /* Dark purple background on hover */
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--light-mauve);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  background-color: #faf9f6;
 }
 
-/* Additional CSS to clear floats */
-.clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
+button {
+  background-color: var(--mauve);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
+button:hover {
+  background-color: var(--light-mauve);
+}
 
-    
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
 
-    
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: var(--light-mauve);
+  color: var(--graphite);
+}
+
+tfoot {
+  font-size: 0.9rem;
+  color: var(--soft-graphite);
+  margin-top: 2rem;
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  color: var(--soft-graphite);
+  font-size: 0.85rem;
+}
+
+.admin-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    color: var(--mauve);  /* graphite shade */
+    background-color: var(--cream);  /* cream shade */
+    border: 1px solid #b9b4c7;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.admin-btn:hover {
+    background-color: #dcd6cb;
+    color: #3e3a42;
+}
+
+/* Admin Login Page */
+.login-body {
+  background-color: #f7f3f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background-color: #fff;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+.login-logo img {
+  max-width: 120px;
+  margin-bottom: 1rem;
+}
+
+.login-title {
+  color: #3e3e3e;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.login-links {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.login-links a {
+  color: #5a5a5a;
+  text-decoration: none;
+  margin: 0 0.25rem;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}

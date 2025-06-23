@@ -1,53 +1,81 @@
+# PreSync - Face Recognition Attendance System
 
-# Face Recognition Attendance System 
+**PreSync* is a cutting-edge attendance tracking system that uses webcam-based face recognition. With a sleek and user-friendly interface, it enables administrators to manage users securely and automatically record attendance through real-time face detection.
 
-## Description
-Software for Industry , where they can track the attendence of their employee with the help of face recognition using OpenCV library.
+---
 
-## Table of Contents
-- [Project Plan](#project-plan)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+## 🚀 Features
 
-## Project Plan
-- Task:
-  - [x] Create a home page
-  - [x] Show attendence log on home for particular day
-  - [ ] Recreate a HTML , bootstrap boilerplate and remove unwanted code
-  - [ ] Show date and day on home page
-  - [ ] Company name should be visible on home page
-  - [ ] Show list of total Employee on home page
-  - [ ] Create a Admin panel
-  - [ ] Give various rights to admin 
-  - [ ] Work on UI
+- 🎥 Real-time face recognition using a webcam
+- 👤 Secure admin login and sign-up system (powered by SQLite)
+- ➕ Easily add new users with live face capture
+- 📋 Attendance is logged with precise timestamps
+- 📁 Attendance records are automatically saved in CSV format
+- 🧠 Model training utilizes K-Nearest Neighbors
+- 🖼️ Responsive user interface featuring a sidebar and dashboard layout
+- ✅ Stylish modern UI with a custom theme (Mauve + Cream + Graphite)
 
-## Features
-- Adding a New User
+---
 
--	Capturing Live Images
+## 🛠️ Tech Stack
 
--	To understand the Total number of Users in Database
-  
--	Click on Take Attendance 
+- **Frontend:** HTML, CSS (custom + Bootstrap), Jinja2 (via Flask templates)
+- **Backend:** Python, Flask
+- **Database:** SQLite (`admin_data.db`)
+- **ML:** OpenCV, scikit-learn, NumPy, Pandas, joblib
 
--	Multiple User Faces can be detected
+---
 
--	Attendance of Multiple Users taken
+## 📁 Project Structure
 
--	Attendance of Users displayed
+├── Attendance/                   # Daily attendance CSVs
+├── static/
+│   ├── faces/                    # User face image folders
+│   ├── images/logo.png           # Logo image
+│   ├── style.css                 # Stylesheet
+├── templates/
+│   ├── home.html                 # Dashboard (home)
+│   ├── adminlogin.html           # Admin login page
+│   ├── sign.html                 # Admin signup page
+│   └── admin.html                # Admin panel
+├── venv
+├── admin_data.db                 # Admin credentials database
+├── app.py                        # Main Flask app
+├── haarcascade_frontalface_default.xml  # Face detection model
+└── README.md
 
-## Installation
-- Explain how to install or set up the project.
+---
 
-## Usage
-- this is useful in tracking the attendence of your employees
+## 👤Admin Workflow
 
-## Contributing
-- Contributers are welcomed, you can simply fork the repo and contribute , and make PR
-- Dont wait for getting issue assigned to you
-## License
-- Include information about the project's license.
+1. Sign up or log in at /adminlogin
+2. Use the webcam to add users → it captures 50 face images
+3. The model trains automatically
+4. Start face recognition for attendance by clicking a button
+5. Attendance logs are saved to a CSV file with a timestamp
 
+---
+
+## 📌 Notes
+- To mark attendance, simply press A once the face is detected.
+- You can stop the webcam capture at any time by hitting Q or Esc.
+- Make sure the haarcascade_frontalface_default.xml file is in the root directory.
+
+---
+
+## 💡 Future Enhancements
+- Allow face registration through file uploads
+- Integrate a confidence threshold for face recognition
+- Create a student portal where users can log in to view their own attendance
+
+---
+
+## 📜 License
+This project is open-source and falls under the MIT License.
+
+---
+
+## ✨ Credits
+Originally inspired by various open-source face recognition repositories.
+
+---
