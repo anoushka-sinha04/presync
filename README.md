@@ -25,9 +25,9 @@
 - **ML:** OpenCV, scikit-learn, NumPy, Pandas, joblib
 
 ---
-
+<pre>
 ## 📁 Project Structure
-
+```
 ├── Attendance/                   # Daily attendance CSVs
 ├── static/
 │   ├── faces/                    # User face image folders
@@ -38,12 +38,13 @@
 │   ├── adminlogin.html           # Admin login page
 │   ├── sign.html                 # Admin signup page
 │   └── admin.html                # Admin panel
-├── venv
+├── venv                          # Virtual environment
 ├── admin_data.db                 # Admin credentials database
 ├── app.py                        # Main Flask app
 ├── haarcascade_frontalface_default.xml  # Face detection model
 └── README.md
-
+```
+</pre>
 ---
 
 ## 👤Admin Workflow
