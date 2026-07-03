@@ -3,75 +3,145 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PreSync | Attendance</title>
+  <title>PreSync | Smart Attendance System</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
   <header class="top-bar">
     <div class="logo-section">
-      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="PreSync Logo" class="logo" />
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="PreSync Logo" />
     </div>
     <div class="admin-login">
-      <a href="/adminlogin" class="admin-btn">ADMIN LOGIN</a>
+      <a href="/adminlogin" class="admin-btn">ADMIN PORTAL</a>
     </div>
   </header>
 
   <div class="main-content">
     <aside class="sidebar">
       <div class="date-card">
-        <p>{{ current_date }}</p>
+        <p>{{ datetoday2 }}</p>
+      </div>
+      <div class="sidebar-nav">
+        <ul>
+          <li class="active"><a href="/">Home</a></li>
+          <li><a href="/adminlogin">Admin Dashboard</a></li>
+        </ul>
       </div>
     </aside>
 
     <section class="dashboard">
+      <!-- Status Messages & Instructions -->
+      {% if mess %}
+      <div class="alert-banner">
+        <span>📢</span>
+        <span>{{ mess }}</span>
+      </div>
+      {% endif %}
+
+      <div class="dashboard-row-2">
+        <!-- Attendance Table -->
+        <div class="card">
+          <h2>
+            <span>Today's Attendance 📋</span>
+            <form method="GET" action="/start" style="display:inline;">
+              <button class="primary-btn" type="submit">⚡ Take Attendance</button>
+            </form>
+          </h2>
+          
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Name</th>
+                  <th>ID</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if attendance_data %}
+                  {% for row in attendance_data %}
+                    <tr>
+                      <td>{{ loop.index }}</td>
+                      <td><strong>{{ row.name }}</strong></td>
+                      <td><code>{{ row.id }}</code></td>
+                      <td>{{ row.time }}</td>
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="4" class="empty-placeholder">
+                      No attendance marked for today yet. Click "Take Attendance" to begin.
+                    </td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Add User Card -->
+        <div class="card">
+          <h2>Add New User 👤</h2>
+          <form method="POST" action="/add">
+            <div style="margin-bottom: 0.5rem;">
+              <label for="newusername">Name</label>
+              <input type="text" id="newusername" name="newusername" placeholder="e.g. John Doe" required />
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+              <label for="newuserid">User ID / Roll Number</label>
+              <input type="text" id="newuserid" name="newuserid" placeholder="e.g. 101" required />
+            </div>
+            
+            <button class="accent-btn" type="submit">➕ Register Face & Add User</button>
+          </form>
+          
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); text-align: center;">
+            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+              Total Registered Users: <strong>{{ totalreg }}</strong>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Registered Users -->
       <div class="card">
-        <h2>Today's Attendance 📋
-        <form method="GET" action="/start">
-          <button class="primary-btn" type="submit">Take Attendance</button>
-        </form></h2>
-        <table>
-          <thead>
-            <tr><th>S.No</th><th>Name</th><th>ID</th><th>Time</th></tr>
-          </thead>
-          <tbody>
-            {% for row in attendance_data %}
+        <h2>Registered Faces Database 🗄️</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
               <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ row.name }}</td>
-                <td>{{ row.id }}</td>
-                <td>{{ row.time }}</td>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Registered ID</th>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <div class="card">
-        <h2>Add New User 👤</h2>
-        <form method="POST" action="/add">
-          <input type="text" name="username" placeholder="New User Name" required />
-          <input type="text" name="userid" placeholder="New User ID" required />
-          <button class="primary-btn" type="submit">Add User</button>
-        </form>
-        <p>Total Users: {{ total_users }}</p>
-      </div>
-
-      <div class="card">
-        <h2>All Registered Users</h2>
-        <table>
-          <thead><tr><th>S.No</th><th>Name</th><th>ID</th></tr></thead>
-          <tbody>
-            {% for user in users %}
-              <tr><td>{{ loop.index }}</td><td>{{ user.name }}</td><td>{{ user.id }}</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% if users %}
+                {% for user in users %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td><strong>{{ user.name }}</strong></td>
+                    <td><code>{{ user.id }}</code></td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="3" class="empty-placeholder">
+                    No registered faces found in the database.
+                  </td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   </div>
 
-  <footer class="footer">
-    &copy; 2025 PreSync Attendance System
+  <footer>
+    &copy; 2026 PreSync Face Recognition Attendance System
   </footer>
 </body>
 </html>

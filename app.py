@@ -114,6 +114,47 @@ def add_attendance(name):
         #     f.write(f'\n{username},{userid},{current_time}')
 
 
+################## HELPER FUNCTIONS FOR TEMPLATES ##################
+
+def render_home_page(mess=None):
+    if mess is None:
+        mess = MESSAGE
+    
+    # Extract attendance list safely
+    names, rolls, times, l = extract_attendance()
+    attendance_data = []
+    for i in range(l):
+        attendance_data.append({
+            'name': names.iloc[i] if hasattr(names, 'iloc') else names[i],
+            'id': rolls.iloc[i] if hasattr(rolls, 'iloc') else rolls[i],
+            'time': times.iloc[i] if hasattr(times, 'iloc') else times[i]
+        })
+    
+    # Extract registered users list safely from folders
+    users = []
+    if os.path.exists('static/faces'):
+        for folder in os.listdir('static/faces'):
+            if '_' in folder:
+                parts = folder.split('_', 1)
+                users.append({
+                    'name': parts[0],
+                    'id': parts[1]
+                })
+            else:
+                users.append({
+                    'name': folder,
+                    'id': 'N/A'
+                })
+                
+    return render_template(
+        'home.html',
+        attendance_data=attendance_data,
+        users=users,
+        totalreg=totalreg(),
+        datetoday2=datetoday2,
+        mess=mess
+    )
+
 ################## ROUTING FUNCTIONS ##############################
 
 #### Our main page
@@ -128,6 +169,7 @@ def adminlogin():
         result = c.fetchone()
         conn.close()
         if result:
+            session['admin'] = username
             return redirect(url_for('admin_dashboard'))
         else:
             return "Invalid credentials. Please try again."
@@ -140,12 +182,9 @@ def sign_up():
 
 @app.route('/admin')
 def admin_dashboard():
-    return render_template('admin.html', total_users=10, today_attendance=5)
-
-@app.route('/')
-def home():
-    names,rolls,times,l = extract_attendance()
-    return render_template('home.html',names=names,rolls=rolls,times=times,l=l,totalreg=totalreg(),datetoday2=datetoday2, mess = MESSAGE)
+    # Make stats dynamic based on database & today's CSV file
+    names, rolls, times, l = extract_attendance()
+    return render_template('admin.html', total_users=totalreg(), today_attendance=l)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -164,22 +203,26 @@ def signup():
         return redirect(url_for('adminlogin'))
     return render_template('sign.html')
 
+@app.route('/')
+def home():
+    return render_home_page()
+
 #### This function will run when we click on Take Attendance Button
 @app.route('/start',methods=['GET'])
 def start():
-    ATTENDENCE_MARKED = False
     if 'face_recognition_model.pkl' not in os.listdir('static'):
-        names, rolls, times, l = extract_attendance()
-        MESSAGE = 'This face is not registered with us , kindly register yourself first'
+        mess = 'This face is not registered with us , kindly register yourself first'
         print("face not in database, need to register")
-        return render_template('home.html',names=names,rolls=rolls,times=times,l=l,totalreg=totalreg,datetoday2=datetoday2, mess = MESSAGE)
-        # return render_template('home.html',totalreg=totalreg(),datetoday2=datetoday2,mess='There is no trained model in the static folder. Please add a new face to continue.')
+        return render_home_page(mess=mess)
 
     cap = cv2.VideoCapture(0)
     ret = True
+    ATTENDENCE_MARKED = False
     while True:
         # Read a frame from the camera
         ret, frame = cap.read()
+        if not ret:
+            break
         
         # Convert the frame to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -200,24 +243,21 @@ def start():
                 ATTENDENCE_MARKED = True
                 break
         if ATTENDENCE_MARKED:
-            # time.sleep(3)
             break
 
         # Display the resulting frame
         cv2.imshow('Attendance Check, press "q" to exit', frame)
         cv2.putText(frame,'hello',(30,30),cv2.FONT_HERSHEY_COMPLEX,2,(255, 255, 255))
         
-    # Wait for the user to press 'q' to quit
+        # Wait for the user to press 'q' to quit
         if cv2.waitKey(1) == ord('q'):
             break
 
     cap.release()
     cv2.destroyAllWindows()
-    names, rolls, times, l = extract_attendance()
-    MESSAGE = 'Attendence taken successfully'
+    mess = 'Attendence taken successfully'
     print("attendence registered")
-    return render_template('home.html', names=names, rolls=rolls, times=times, l=l, totalreg=totalreg(),
-                           datetoday2=datetoday2, mess=MESSAGE)
+    return render_home_page(mess=mess)
 
 @app.route('/add',methods=['GET','POST'])
 def add():
@@ -229,7 +269,9 @@ def add():
     cap = cv2.VideoCapture(0)
     i,j = 0,0
     while 1:
-        _,frame = cap.read()
+        ret, frame = cap.read()
+        if not ret:
+            break
         faces = extract_faces(frame)
         for (x,y,w,h) in faces:
             cv2.rectangle(frame,(x, y), (x+w, y+h), (255, 0, 20), 2)
@@ -248,18 +290,22 @@ def add():
     cv2.destroyAllWindows()
     print('Training Model')
     train_model()
-    names,rolls,times,l = extract_attendance()
-    if totalreg() > 0 :
-        names, rolls, times, l = extract_attendance()
-        MESSAGE = 'User added Sucessfully'
-        print("message changed")
-        return render_template('home.html',names=names,rolls=rolls,times=times,l=l,totalreg=totalreg(),datetoday2=datetoday2, mess = MESSAGE)
+    
+    if totalreg() > 0:
+        return render_home_page(mess='User added Sucessfully')
     else:
-        return redirect(url_for('home.html',names=names,rolls=rolls,times=times,l=l,totalreg=totalreg(),datetoday2=datetoday2))
-    # return render_template('home.html',names=names,rolls=rolls,times=times,l=l,totalreg=totalreg(),datetoday2=datetoday2)
+        return redirect(url_for('home'))
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
+
+@app.route('/add_user')
+def add_user():
+    return redirect(url_for('home'))
 
 #### Our main function which runs the Flask App
-app.run(debug=True,port=1000)
 if __name__ == '__main__':
     app.run(debug=True, port=1000)
-#### This function will run when we add a new user
+
